@@ -1,6 +1,7 @@
 plugins {
 	id 'java'
 	id 'java-library'
+	id 'maven-publish'	// artifact를 Maven 처럼 배포하기 위해 선언
 	id 'org.springframework.boot' version '3.4.4'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
@@ -46,3 +47,16 @@ tasks.named('test') {
 //	useJUnitPlatform()
 	exclude '**/*'
 }
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+			groupId = 'kr.fado'
+			artifactId = 'library-exception'
+			version = '1.0.0'
+		}
+	}
+}
+
+
