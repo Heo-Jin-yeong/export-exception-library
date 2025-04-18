@@ -1,13 +1,13 @@
 plugins {
 	id 'java'
 	id 'java-library'
-	id 'maven-publish'	// artifact를 Maven 처럼 배포하기 위해 선언
+	id 'maven-publish' // Maven 배포용
 	id 'org.springframework.boot' version '3.4.4'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'kr.fado'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0' // 배포할 버전 명시
 
 java {
 	toolchain {
@@ -25,12 +25,17 @@ repositories {
 	mavenCentral()
 }
 
+// Spring Boot 실행 jar 비활성화
 bootJar {
 	enabled = false
 }
 
+// 일반 라이브러리용 .jar 활성화 및 설정
 jar {
 	enabled = true
+	archiveClassifier.set('') // 👉 'plain' 제거해서 기본 jar로 만듦
+	archiveBaseName.set("library-exception")
+	archiveVersion.set("1.0.0")
 }
 
 dependencies {
@@ -42,27 +47,25 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-// Build Test Source Skip
+// 테스트 제외 (임시)
 tasks.named('test') {
-//	useJUnitPlatform()
 	exclude '**/*'
 }
 
+// Maven 퍼블리싱 설정
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
-			from components.java
+			artifact tasks.named("jar") // 일반 jar 명시
+
 			groupId = 'kr.fado'
 			artifactId = 'library-exception'
 			version = '1.0.0'
 
-			// 의존성의 버전을 명시합니다
-			dependencies {
-				implementation 'org.springframework.boot:spring-boot-starter-web:3.4.4'
-				implementation 'org.springframework.boot:spring-boot-starter-validation:3.4.4'
+			pom {
+				name = 'library-exception'
+				description = 'Custom exception library for Spring Boot'
 			}
 		}
 	}
 }
-
-
