@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'java-library'
+	id 'java-library' // library 배포용
 	id 'maven-publish' // Maven 배포용
 	id 'org.springframework.boot' version '3.4.4'
 	id 'io.spring.dependency-management' version '1.1.7'
@@ -33,7 +33,7 @@ bootJar {
 // 일반 라이브러리용 .jar 활성화 및 설정
 jar {
 	enabled = true
-	archiveClassifier.set('') // 👉 'plain' 제거해서 기본 jar로 만듦
+	archiveClassifier.set('') // 'plain' 제거해서 기본 jar로 만듦
 	archiveBaseName.set("library-exception")
 	archiveVersion.set("1.0.0")
 }
